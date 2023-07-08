@@ -8,10 +8,8 @@ class Database
     {
         try {
             $this->pdo = new PDO('mysql:host=localhost;dbname=test', 'root', '');
-            echo 'OK';
         } catch (PDOException $exception) {
             die($exception->getMessage());
-
         }
     }
 
@@ -22,7 +20,17 @@ class Database
 
         return self::$instance;
     }
+
+    public function query($sql) {
+        $query = $this->pdo->prepare($sql);
+        $query->execute();
+        $result = $query->fetchAll(PDO::FETCH_OBJ);
+        return $result;
+    }
 }
+
+
+
 
 
 
