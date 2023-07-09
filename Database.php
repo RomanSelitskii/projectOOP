@@ -41,7 +41,6 @@ class Database
             $this->count = $this->query->rowCount();
             return $this;
         }
-
     }
 
     public function error()
@@ -57,6 +56,28 @@ class Database
     public function count()
     {
         return $this->count;
+    }
+
+    public function get($table, $where = [])
+    {
+        if (count($where) === 3) {
+
+            $operators = ['=', '>', '<', '>=', '<='];
+
+            $field = $where[0];
+            $operator = $where[1];
+            $value = $where[2];
+
+            if (in_array($operator, $operators)) {
+                $sql = "SELECT * FROM {$table} WHERE {$field} {$operator} ?";
+                if (!$this->query($sql, [$value])->error()) {
+                    return $this;
+                }
+
+            }
+        }
+
+        return false;
     }
 }
 
