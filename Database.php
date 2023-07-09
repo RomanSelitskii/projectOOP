@@ -19,7 +19,6 @@ class Database
         if (!isset(self::$instance)) {
             self::$instance = new Database();
         }
-
         return self::$instance;
     }
 
@@ -45,9 +44,14 @@ class Database
     public function results()
     {
         return $this->results;
+    }
 
+    public function count() {
+        return $this->count;
     }
 }
+
+
 
 
 
