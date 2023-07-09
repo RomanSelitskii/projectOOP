@@ -3,7 +3,7 @@
 class Database
 {
     private static $instance = null;
-    private $pdo, $query, $error = false;
+    private $pdo, $query, $error = false, $results, $count;
 
     private function __construct()
     {
@@ -29,9 +29,12 @@ class Database
         $this->query = $this->pdo->prepare($sql);
         if (!$this->query->execute()) {
             $this->error = true;
+        } else {
+            $this->results = $this->query->fetchAll(PDO::FETCH_OBJ);
+            $this->count = $this->query->rowCount();
+            return $this;
         }
-        $this->results = $this->query->fetchAll(PDO::FETCH_OBJ);
-        return $this;
+
     }
 
     public function error()
