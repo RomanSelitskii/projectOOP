@@ -27,18 +27,26 @@ class Database
     {
         $this->error = false;
         $this->query = $this->pdo->prepare($sql);
-        if ($this->query->execute()) {
+        if (!$this->query->execute()) {
             $this->error = true;
         }
-        $result = $this->query->fetchAll(PDO::FETCH_OBJ);
-        return $result;
+        $this->results = $this->query->fetchAll(PDO::FETCH_OBJ);
+        return $this;
     }
 
     public function error()
     {
         return $this->error;
     }
+
+    public function results()
+    {
+        return $this->results;
+
+    }
 }
+
+
 
 
 

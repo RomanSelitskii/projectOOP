@@ -3,13 +3,12 @@ require_once 'Database.php';
 
 $users = Database::getInstance()->query("SELECT * FROM users");
 
-if($users->error()) {
+if ($users->error()) {
     echo "we have an error";
-}else {
-    echo 'everything is okay';
+} else {
+    foreach ($users->results() as $user) {
+        echo $user->username . '<br>';
+    }
 }
 
-die;
-foreach ($users as $user) {
-    echo $user->username . '<br>';
-}
+
