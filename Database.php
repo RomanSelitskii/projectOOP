@@ -1,8 +1,9 @@
 <?php
+
 class Database
 {
     private static $instance = null;
-    private $pdo;
+    private $pdo, $query, $error = false;
 
     private function __construct()
     {
@@ -13,7 +14,8 @@ class Database
         }
     }
 
-    public static function getInstance() {
+    public static function getInstance()
+    {
         if (!isset(self::$instance)) {
             self::$instance = new Database();
         }
@@ -21,13 +23,25 @@ class Database
         return self::$instance;
     }
 
-    public function query($sql) {
-        $query = $this->pdo->prepare($sql);
-        $query->execute();
-        $result = $query->fetchAll(PDO::FETCH_OBJ);
+    public function query($sql)
+    {
+        $this->error = false;
+        $this->query = $this->pdo->prepare($sql);
+        if ($this->query->execute()) {
+            $this->error = true;
+        }
+        $result = $this->query->fetchAll(PDO::FETCH_OBJ);
         return $result;
     }
+
+    public function error()
+    {
+        return $this->error;
+    }
 }
+
+
+
 
 
 
