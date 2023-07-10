@@ -6,11 +6,14 @@ require_once 'Database.php';
 //$users = Database::getInstance()->delete('users', ['username', '=', "Jane Koe"]);
 
 
-$users = Database::getInstance()->insert('users', [
-    'username' => 'Marlin',
-    'password' => 'password',
-
-]);
+$users = Database::getInstance()->get('users', ['id', '=', "3"]);
+//var_dump($users->results()[0]);
+//$id = 3;
+//$users = Database::getInstance()->update('users', $id, [
+//    'username' => 'Marlin5',
+//    'password' => 'password5',
+//
+//]);
 
 
 //if ($users->error()) {
@@ -21,6 +24,7 @@ $users = Database::getInstance()->insert('users', [
 //    }
 //}
 
+echo $users->first()->username;
 
 
 
