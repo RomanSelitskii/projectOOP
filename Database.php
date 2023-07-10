@@ -70,6 +70,8 @@ class Database
 
             if (in_array($operator, $operators)) {
                 $sql = "SELECT * FROM {$table} WHERE {$field} {$operator} ?";
+
+
                 if (!$this->query($sql, [$value])->error()) {
                     return $this;
                 }
@@ -79,6 +81,35 @@ class Database
 
         return false;
     }
+
+    public function delete($table, $where = [])
+    {
+        if (count($where) === 3) {
+
+            $operators = ['=', '>', '<', '>=', '<='];
+
+            $field = $where[0];
+            $operator = $where[1];
+            $value = $where[2];
+
+            if (in_array($operator, $operators)) {
+
+                $sql = "DELETE FROM {$table} WHERE {$field} {$operator} ?";
+                var_dump($sql);die();
+
+                if (!$this->query($sql, [$value])->error()) {
+                    return $this;
+                }
+
+            }
+        }
+
+        return false;
+    }
+
+
+
+
 }
 
 
