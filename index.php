@@ -1,8 +1,12 @@
 <?php
+session_start();
+
 require_once 'Database.php';
 require_once 'Config.php';
 require_once 'Validate.php';
 require_once 'Input.php';
+require_once 'Token.php';
+require_once 'Session.php';
 
 $GLOBALS['config'] = [
     'mysql' => [
@@ -11,7 +15,7 @@ $GLOBALS['config'] = [
         'password' => '',
         'database' => 'test',
         'something' => [
-            'no'=> [
+            'no' => [
                 'foo' => [
                     'bar' => 'baz'
                 ]
@@ -20,7 +24,7 @@ $GLOBALS['config'] = [
     ],
 
     'session' => [
-            'token_name' => 'token'
+        'token_name' => 'token'
     ]
 ];
 
@@ -53,44 +57,43 @@ $users = Database::getInstance()->query('select * from users');
 
 if (Input::exists()) {
     if (Token::check(Input::get('token'))) {
+        $validate = new Validate();
 
-    }
-    $validate = new Validate();
+        $validation = $validate->check($_POST, [
+            'username' => [
+                'required' => true,
+                'min' => 2,
+                'max' => 15,
+                'unique' => 'users'
+            ],
+            'password' => [
+                'required' => true,
+                'min' => 3
+            ],
+            'password_again' => [
+                'required' => true,
+                'matches' => 'password'
+            ]
+        ]);
 
-    $validation = $validate->check($_POST, [
-        'username' => [
-            'required' => true,
-            'min' => 2,
-            'max' => 15,
-            'unique' => 'users'
-        ],
-        'password' => [
-            'required' => true,
-            'min' => 3
-        ],
-        'password_again' => [
-            'required' => true,
-            'matches' => 'password'
-        ],
-        'my_file' => [
-                'file' => true
-        ]
-    ]);
-
-    if ($validation->passed()) {
-        echo 'passed';
-    } else {
-        foreach ($validation->errors() as $error) {
-            echo $error . "<br>";
+        if ($validation->passed()) {
+            Session::flash('success', 'register success');
+//            header('Location: /test.php');
+        } else {
+            foreach ($validation->errors() as $error) {
+                echo $error . "<br>";
+            }
         }
     }
+
 }
 ?>
 
 <form action="" method="post">
+    <?php echo Session::flash('success'); ?>
     <div class="field">
         <label for="username">Username</label>
-        <input type="text" name="username" value="<?php echo Input::get('username')?>">
+        <input type="text" name="username" value="<?php echo Input::get('username') ?>">
     </div>
 
     <div class="field">
@@ -103,7 +106,7 @@ if (Input::exists()) {
         <input type="text" name="password_again">
     </div>
 
-    <input type="hidden" name="token" value="<?php echo Token::generate();?>">
+    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
 
 
     <div class="field">
