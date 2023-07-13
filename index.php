@@ -1,6 +1,8 @@
 <?php
 require_once 'Database.php';
 require_once 'Config.php';
+require_once 'Validate.php';
+require_once 'Input.php';
 
 $GLOBALS['config'] = [
     'mysql' => [
@@ -46,7 +48,6 @@ $GLOBALS['config'] = [
 //echo $users->first()->username;
 
 $users = Database::getInstance()->query('select * from users');
-var_dump($users->results());
 
 if (Input::exists()) {
     $validate = new Validate();
@@ -65,6 +66,9 @@ if (Input::exists()) {
         'password_again' => [
             'required' => true,
             'matches' => 'password'
+        ],
+        'my_file' => [
+                'file' => true
         ]
     ]);
 
@@ -93,6 +97,9 @@ if (Input::exists()) {
         <label for="">Password Again</label>
         <input type="text" name="password_again">
     </div>
+
+    <input type="file" name="my_file">
+
 
     <div class="field">
         <button type="submit">Submit</button>
