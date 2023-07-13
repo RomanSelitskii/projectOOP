@@ -19,7 +19,9 @@ $GLOBALS['config'] = [
         ]
     ],
 
-    'config_my' => []
+    'session' => [
+            'token_name' => 'token'
+    ]
 ];
 
 //$users = Database::getInstance()->query("SELECT * FROM users WHERE username IN (?, ?)", ['John Doe', "Jane Koe"]);
@@ -50,6 +52,9 @@ $GLOBALS['config'] = [
 $users = Database::getInstance()->query('select * from users');
 
 if (Input::exists()) {
+    if (Token::check(Input::get('token'))) {
+
+    }
     $validate = new Validate();
 
     $validation = $validate->check($_POST, [
@@ -98,7 +103,7 @@ if (Input::exists()) {
         <input type="text" name="password_again">
     </div>
 
-    <input type="file" name="my_file">
+    <input type="hidden" name="token" value="<?php echo Token::generate();?>">
 
 
     <div class="field">
