@@ -1,5 +1,26 @@
 <?php
 
+require_once 'init.php';
+
+//echo Session::get(Config::get('session.user_session'));
+
+$user = new User;
+
+$anotherUser = new User(6);
+
+if ($user->isLoggegIn()) {
+    echo "Hi, <a href='#'>{$user->data()->username}</a>";
+    echo "<p><a href='logout.php'>Logout</a></p>";
+} else {
+    echo "<a href='login.php'>Login</a> or <a href='register.php'>Register</a>";
+}
+//echo $user->data()->username;
+//echo $anotherUser->data()->username;
+//if ($user->isLoggedIn()) {
+//    //
+//} else {
+//    //
+//}
 //Redirect::to('test.php');
 //Redirect::to(404);
 
