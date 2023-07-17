@@ -6,7 +6,7 @@ require_once 'init.php';
 
 $user = new User;
 
-$anotherUser = new User(6);
+//$anotherUser = new User(6);
 
 if ($user->isLoggegIn()) {
     echo "Hi, <a href='#'>{$user->data()->username}</a>";
