@@ -12,8 +12,6 @@ class User {
                 $user = Session::get($this->session_name);//id
                 if ($this->find($user)) {
                     $this->isLoggedIn = true;
-                } else {
-                    //logout
                 }
             }
 
@@ -85,12 +83,12 @@ class User {
         return $this->data;
     }
 
-    public function isLoggegIn() {
+    public function isLoggedIn() {
         return $this->isLoggedIn;
     }
 
     public function logout() {
-        $this->db->delete('user_session', ['user_id', '=', $this->data()->id]);
+        $this->db->delete('user_sessions', ['user_id', '=', $this->data()->id]);
         Session::delete($this->session_name);
         Cookie::delete($this->cookieName);
     }
@@ -100,10 +98,18 @@ class User {
     }
 
     public function update($fields = [], $id = null) {
-        if (!$id && $this->isLoggegIn()){
+        if (!$id && $this->isLoggedIn()){
             $id = $this->data()->id;
         }
 
         $this->db->update('users', $id, $fields);
+    }
+
+    public function hasPermissions($key = null) {
+        $group = $this->db->get('groups', ['id', '=', $this->data()->group_id]);
+
+        $permissions = $group->first()->permissions;
+        $permissions = json_decode($permissions, true);
+        var_dump($permissions);
     }
 }

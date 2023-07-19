@@ -4,6 +4,7 @@ require_once 'init.php';
 $user = new User;
 
 $validate = new Validate();
+
 $validate->check($_POST, [
     'username' => ['required' => true, 'min' => 2]
 ]);
@@ -34,5 +35,5 @@ if (Input::exists()) {
         <button type="submit">Submit</button>
     </div>
 
-    <input type="hidden" name="token" value="<?php echo Token::generate(); ?>">
+    <input type="hidden" name="token" value="<?php echo Token::generate();?>">
 </form>
